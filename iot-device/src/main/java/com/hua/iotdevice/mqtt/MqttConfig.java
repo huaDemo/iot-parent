@@ -27,7 +27,7 @@ public class MqttConfig {
     private int keepAliveInterval;
 
     @Bean
-    public MqttClient mqttClient() throws Exception{
+    public MqttClient mqttClient() throws Exception {
         MqttClient mqttClient = new MqttClient(host, clientId, new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
         options.setCleanSession(false);
@@ -37,9 +37,9 @@ public class MqttConfig {
         options.setConnectionTimeout(connectionTimeout);
         // 设置会话心跳时间
         options.setKeepAliveInterval(keepAliveInterval);
-        mqttClient.setCallback(new PushCallback(deviceBizService,deviceParamMapper,stringRedisTemplate,mqttClient,executionOpenService));
+        mqttClient.setCallback(new PushCallback(deviceBizService, deviceParamMapper, stringRedisTemplate, mqttClient, executionOpenService));
         mqttClient.connect(options);
-        mqttClient.subscribe("/server",qos);
+        mqttClient.subscribe("/server", qos);
         return mqttClient;
     }
 

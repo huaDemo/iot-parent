@@ -28,6 +28,7 @@ public class MqttConfig {
 
     @Bean
     public MqttClient mqttClient() throws Exception {
+        
         MqttClient mqttClient = new MqttClient(host, clientId, new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
         options.setCleanSession(false);

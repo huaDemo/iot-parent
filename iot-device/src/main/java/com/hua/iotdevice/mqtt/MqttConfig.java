@@ -37,7 +37,7 @@ public class MqttConfig {
         options.setConnectionTimeout(connectionTimeout);
         // 设置会话心跳时间
         options.setKeepAliveInterval(keepAliveInterval);
-        mqttClient.setCallback(new PushCallback(deviceBizService, deviceParamMapper, stringRedisTemplate, mqttClient, executionOpenService));
+        mqttClient.setCallback(new PushCallback());
         mqttClient.connect(options);
         mqttClient.subscribe("/server", qos);
         return mqttClient;

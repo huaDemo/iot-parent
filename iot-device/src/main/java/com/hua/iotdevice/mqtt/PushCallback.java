@@ -1,9 +1,9 @@
 package com.hua.iotdevice.mqtt;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import com.alibaba.fastjson.JSONObject;
+import com.hua.iotdevice.config.MqttConfig;
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * 接收到已经发布的 QoS 1 或 QoS 2 消息的传递令牌时调用。
  * 由 MqttClient.connect 激活此回调。
  */
-public class PushCallback implements MqttCallback {
+public class PushCallback implements MqttCallbackExtended {
 
     private static final Logger logger = LoggerFactory.getLogger(PushCallback.class);
 
@@ -31,44 +31,65 @@ public class PushCallback implements MqttCallback {
 
     private MqttClient mqttClient;
 
-    @Override
+    private MqttConfig mqttConfig;
+
+    public PushCallback(MqttClient mqttClient,MqttConfig mqttConfig) {
+        this.mqttClient = mqttClient;
+        this.mqttConfig = mqttConfig;
+    }
+
+    /**
+     * 断开连接时触发
+     *
+     * @param throwable
+     */
     public void connectionLost(Throwable throwable) {
         if (throwable != null) {
             logger.warn("[客户端断开连接]", throwable);
         }
         //尝试从新连接
-        try {
-            mqttClient.connect();
-            logger.info("[emqx] 客户端已经稳定连接");
-        } catch (Exception e) {
-            logger.error("重新连接失败", e);
-            connected = false;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (!connected) {
-                        try {
-                            Thread.sleep(10000);
-                            mqttClient.connect();
-                            logger.info("[emqx] 客户端已经稳定连接");
-                            connected = true;
-                        } catch (Exception e1) {
-                            logger.error("重新连接失败", e);
-                        }
+        /*connected = false;
+        new Thread(new Runnable() {
+            public void run() {
+                while (!connected) {
+                    try {
+                        Thread.sleep(10000);
+                        mqttClient.connect();
+                        logger.info("[emq] 客户端已经稳定连接");
+                        connected = true;
+                    } catch (Exception e) {
+                        logger.error("重新连接失败", e);
                     }
                 }
-            }).start();
-        }
+            }
+        }).start();*/
     }
 
-    @Override
-    public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
+    public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+        String request = new String(mqttMessage.getPayload());
+        logger.info("[调试]: request=" + request + " [topic]: " + topic);
+
+        //mqttMessage.setQos(2);
 
     }
 
-    @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+        System.out.println("deliveryComplete---------" + iMqttDeliveryToken.isComplete());
+    }
 
+    /**
+     * 重连后触发
+     *
+     * @param b
+     * @param s
+     */
+    @Override
+    public void connectComplete(boolean b, String s) {
+        try {
+            mqttClient.subscribe("/" + mqttConfig.getTopic(), mqttConfig.getQos());
+        } catch (MqttException e) {
+            logger.info("[emq]: 订阅失败信息:" + e.getMessage());
+        }
     }
 
 }

@@ -13,8 +13,8 @@ import java.util.Date;
 public class CommonDO implements Serializable {
 
     private Long id;
-    private Date createDate;
-    private Date updateDate = new Date();
+    private Date createTime;
+    private Date updateTime = new Date();
 
     public Long getId() {
         return id;
@@ -24,20 +24,19 @@ public class CommonDO implements Serializable {
         this.id = id;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
-
 }

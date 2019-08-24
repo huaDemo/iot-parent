@@ -1,4 +1,4 @@
-package com.hua.iotdevice.config;
+package config;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
@@ -38,7 +38,7 @@ public class JsonConfig {
         fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         fastConvert.setSupportedMediaTypes(fastMediaTypes);
         fastConvert.setFastJsonConfig(fastJsonConfig);
-        return new HttpMessageConverters((HttpMessageConverter<?>) fastConvert);
+        return new HttpMessageConverters(fastConvert);
     }
 
 }

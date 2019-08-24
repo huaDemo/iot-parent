@@ -1,4 +1,4 @@
-package com.hua.iotdevice.config;
+package config;
 
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2018-08-12
  */
 @Configuration
-@MapperScan("com.hua.iotdevice.mapper")
+@MapperScan("com.hua.*.mapper")
 public class MybatisPlusConfig {
 
     /**

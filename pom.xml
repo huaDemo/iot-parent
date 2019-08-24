@@ -10,6 +10,9 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>iot-common</module>
+        <module>iot-cms</module>
+        <module>iot-device</module>
+        <module>iot-executor</module>
     </modules>
 
 
